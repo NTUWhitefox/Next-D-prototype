@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>亞洲學生模擬器 Prototype</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <!-- Top Left: Time System -->
+        <div id="time-display" class="hud-panel">
+            <div id="day-count">第 1 天</div>
+            <div id="weekday-display">星期一</div>
+            <div id="time-period">早晨</div>
+        </div>
+
+        <!-- Main Map -->
+        <div id="main-map">
+            <div class="map-location" id="loc-home" onclick="openLocation('home')">
+                <img src="assets/home_bg.png" alt="家">
+                <div class="loc-label">家</div>
+            </div>
+            <div class="map-location" id="loc-street" onclick="openLocation('street')">
+                <img src="assets/street_bg.png" alt="補習街">
+                <div class="loc-label">補習街</div>
+            </div>
+            <div class="map-location placeholder" id="loc-school">
+                <img src="assets/school_bg.png" alt="學校">
+                <div class="loc-label">學校 (開發中)</div>
+            </div>
+            <div class="map-location placeholder" id="loc-park">
+                <img src="assets/park_bg.png" alt="公園">
+                <div class="loc-label">公園 (開發中)</div>
+            </div>
+        </div>
+
+        <!-- Bottom Left: Stats -->
+        <div id="stats-display" class="hud-panel">
+            <div class="stat-row">
+                <label>金錢</label>
+                <span id="val-money" style="color: gold; font-weight: bold;">200</span>
+            </div>
+            <div class="stat-row">
+                <label>壓力</label>
+                <input type="range" id="stat-stress" min="0" max="100" value="0" disabled>
+                <span id="val-stress">0</span>
+            </div>
+            <div class="stat-row">
+                <label>學力</label>
+                <input type="range" id="stat-academic" min="0" max="100" value="0" disabled>
+                <span id="val-academic">0</span>
+            </div>
+            <div class="stat-row">
+                <label>鋼琴</label>
+                <input type="range" id="stat-piano" min="0" max="100" value="0" disabled>
+                <span id="val-piano">0</span>
+            </div>
+        </div>
+
+        <!-- Interaction Panels (Modals) -->
+        <div id="panel-overlay" class="hidden">
+            <div id="location-panel">
+                <div class="panel-header">
+                    <h2 id="panel-title">地點名稱</h2>
+                    <button onclick="closePanel()">X</button>
+                </div>
+                <div id="panel-content">
+                    <!-- Dynamic Content -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Templates for panel content -->
+    <template id="tpl-home">
+        <div class="action-grid">
+            <div class="action-card" onclick="performAction('sleep')">
+                <img src="assets/action_sleep.png" alt="睡覺">
+                <p>睡覺 (-壓力)</p>
+            </div>
+            <div class="action-card" onclick="performAction('piano_easy')">
+                <img src="assets/action_piano.png" alt="簡單練琴">
+                <p>簡單練琴 (+少量鋼琴)</p>
+            </div>
+            <div class="action-card" onclick="performAction('piano_hard')">
+                <img src="assets/action_piano.png" alt="困難練琴">
+                <p>困難練琴 (+大量鋼琴, +壓力)</p>
+            </div>
+            <div class="action-card" onclick="performAction('study')">
+                <img src="assets/action_study.png" alt="居家學習">
+                <p>居家學習 (+學力)</p>
+            </div>
+            <div class="action-card" id="btn-read-comic" onclick="performAction('read_comic')" style="display:none;">
+                <img src="assets/item_comic.png" alt="看漫畫">
+                <p>看漫畫 (-壓力)</p>
+            </div>
+        </div>
+    </template>
+
+    <template id="tpl-street">
+        <div class="action-grid">
+            <div class="action-card" onclick="performAction('cram_school')">
+                <img src="assets/action_cram.png" alt="補習班">
+                <p>補習班 (一三五 下午/晚上)</p>
+            </div>
+            <div class="action-card" onclick="openShop()">
+                <img src="assets/action_shop.png" alt="書店">
+                <p>書店 (購買書籍)</p>
+            </div>
+        </div>
+    </template>
+
+    <template id="tpl-shop">
+        <div class="action-grid">
+            <div class="action-card" onclick="performAction('buy_refbook')">
+                <img src="assets/item_refbook.png" alt="參考書">
+                <p>參考書 ($50)<br><small>提升下次學習效果</small></p>
+            </div>
+            <div class="action-card" onclick="performAction('buy_comic')">
+                <img src="assets/item_comic.png" alt="漫畫書">
+                <p>漫畫書 ($30)<br><small>在家閱讀減壓</small></p>
+            </div>
+        </div>
+        <button onclick="openLocation('street')" style="margin-top: 20px;">返回街道</button>
+    </template>
+
+    <script src="script.js"></script>
+</body>
+</html>
