@@ -55,34 +55,45 @@ body, html {
 }
 
 /* Stats Display */
-#stats-display {
-    bottom: 20px;
-    left: 20px;
-    width: 250px;
+#sidebar-stats {
+    top: 20px;
+    right: 20px;
+    width: 180px;
+    max-height: 90vh;
+    overflow-y: auto;
+    font-size: 0.9rem;
+}
+
+.stat-category {
+    margin-bottom: 15px;
+}
+
+.stat-category h4 {
+    margin: 0 0 5px 0;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 2px;
+    color: #555;
+    font-size: 1em;
 }
 
 .stat-row {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 4px;
 }
 
 .stat-row label {
-    width: 50px;
-    font-weight: bold;
-}
-
-.stat-row input[type="range"] {
-    flex-grow: 1;
-    margin: 0 10px;
+    font-weight: normal;
+    color: #333;
 }
 
 .stat-row span {
-    width: 30px;
-    text-align: right;
+    font-weight: bold;
+    color: #2c3e50;
 }
 
-/* Customizing Sliders colors */
+/* Customizing Sliders colors - Removed as sliders are gone */
 #stat-stress { accent-color: #e74c3c; }
 #stat-academic { accent-color: #3498db; }
 #stat-piano { accent-color: #9b59b6; }

@@ -5,9 +5,31 @@ const gameState = {
     timePeriod: 0, // 0: Morning, 1: Noon, 2: Afternoon, 3: Evening, 4: Late Night
     money: 200,
     stats: {
-        stress: 30,
-        academic: 10,
-        piano: 5
+        // Player Status
+        fatigue: 0,
+        stress: 0,
+        trauma: 0,
+        // Learning
+        learning: {
+            chinese: 0,
+            english: 0,
+            math: 0,
+            science: 0
+        },
+        // Talent
+        talent: {
+            piano: 0,
+            physical: 0,
+            chess: 0,
+            swimming: 0
+        },
+        // Personality
+        personality: {
+            charm: 0,
+            eloquence: 0,
+            deception: 0,
+            home_economics: 0
+        }
     },
     inventory: {
         refBook: false,
@@ -23,12 +45,9 @@ const uiDay = document.getElementById('day-count');
 const uiWeekday = document.getElementById('weekday-display');
 const uiTime = document.getElementById('time-period');
 const uiMoney = document.getElementById('val-money');
-const uiStress = document.getElementById('stat-stress');
-const uiAcademic = document.getElementById('stat-academic');
-const uiPiano = document.getElementById('stat-piano');
-const valStress = document.getElementById('val-stress');
-const valAcademic = document.getElementById('val-academic');
-const valPiano = document.getElementById('val-piano');
+
+// Helper to get stat element by ID
+const getEl = (id) => document.getElementById(id);
 
 const panelOverlay = document.getElementById('panel-overlay');
 const panelTitle = document.getElementById('panel-title');
@@ -50,14 +69,24 @@ function updateUI() {
     uiMoney.textContent = gameState.money;
 
     // Stats
-    uiStress.value = gameState.stats.stress;
-    valStress.textContent = gameState.stats.stress;
+    getEl('val-fatigue').textContent = gameState.stats.fatigue;
+    getEl('val-stress').textContent = gameState.stats.stress;
+    getEl('val-trauma').textContent = gameState.stats.trauma;
 
-    uiAcademic.value = gameState.stats.academic;
-    valAcademic.textContent = gameState.stats.academic;
+    getEl('val-chinese').textContent = gameState.stats.learning.chinese;
+    getEl('val-english').textContent = gameState.stats.learning.english;
+    getEl('val-math').textContent = gameState.stats.learning.math;
+    getEl('val-science').textContent = gameState.stats.learning.science;
 
-    uiPiano.value = gameState.stats.piano;
-    valPiano.textContent = gameState.stats.piano;
+    getEl('val-piano').textContent = gameState.stats.talent.piano;
+    getEl('val-physical').textContent = gameState.stats.talent.physical;
+    getEl('val-chess').textContent = gameState.stats.talent.chess;
+    getEl('val-swimming').textContent = gameState.stats.talent.swimming;
+
+    getEl('val-charm').textContent = gameState.stats.personality.charm;
+    getEl('val-eloquence').textContent = gameState.stats.personality.eloquence;
+    getEl('val-deception').textContent = gameState.stats.personality.deception;
+    getEl('val-home_economics').textContent = gameState.stats.personality.home_economics;
 }
 
 // Time System
@@ -118,20 +147,20 @@ function performAction(action) {
     let costTime = true;
 
     if (action === 'sleep') {
-        const oldStress = gameState.stats.stress;
-        gameState.stats.stress = Math.max(0, gameState.stats.stress - 30);
-        const change = oldStress - gameState.stats.stress;
-        message = `你睡了一覺，壓力減少了 ${change} 點。`;
+        const oldFatigue = gameState.stats.fatigue;
+        gameState.stats.fatigue = Math.max(0, gameState.stats.fatigue - 30);
+        const change = oldFatigue - gameState.stats.fatigue;
+        message = `你睡了一覺，疲勞減少了 ${change} 點。`;
     } 
     else if (action === 'piano_easy') {
-        gameState.stats.piano = Math.min(100, gameState.stats.piano + 10);
-        gameState.stats.stress = Math.min(100, gameState.stats.stress + 5);
-        message = `你輕鬆地練習了鋼琴。(鋼琴+10, 壓力+5)`;
+        gameState.stats.talent.piano = Math.min(100, gameState.stats.talent.piano + 10);
+        gameState.stats.fatigue = Math.min(100, gameState.stats.fatigue + 5);
+        message = `你輕鬆地練習了鋼琴。(鋼琴+10, 疲勞+5)`;
     }
     else if (action === 'piano_hard') {
-        gameState.stats.piano = Math.min(100, gameState.stats.piano + 25);
-        gameState.stats.stress = Math.min(100, gameState.stats.stress + 15);
-        message = `你刻苦地練習了鋼琴！(鋼琴+25, 壓力+15)`;
+        gameState.stats.talent.piano = Math.min(100, gameState.stats.talent.piano + 25);
+        gameState.stats.fatigue = Math.min(100, gameState.stats.fatigue + 15);
+        message = `你刻苦地練習了鋼琴！(鋼琴+25, 疲勞+15)`;
     }
     else if (action === 'study') {
         let gain = 10;
@@ -141,17 +170,18 @@ function performAction(action) {
             gameState.inventory.refBook = false; // Consume buff
             extraMsg = " (參考書加成!)";
         }
-        gameState.stats.academic = Math.min(100, gameState.stats.academic + gain);
-        gameState.stats.stress = Math.min(100, gameState.stats.stress + 10);
-        message = `你在家唸書。${extraMsg} (學力+${gain}, 壓力+10)`;
+        // Defaulting to Math for general study for now
+        gameState.stats.learning.math = Math.min(100, gameState.stats.learning.math + gain);
+        gameState.stats.fatigue = Math.min(100, gameState.stats.fatigue + 10);
+        message = `你在家唸書。${extraMsg} (數學+${gain}, 疲勞+10)`;
     }
     else if (action === 'read_comic') {
         if (gameState.inventory.comic > 0) {
             gameState.inventory.comic--;
-            const oldStress = gameState.stats.stress;
-            gameState.stats.stress = Math.max(0, gameState.stats.stress - 20);
-            const change = oldStress - gameState.stats.stress;
-            message = `你看了一本漫畫，心情變好了。(壓力-${change})`;
+            const oldFatigue = gameState.stats.fatigue;
+            gameState.stats.fatigue = Math.max(0, gameState.stats.fatigue - 20);
+            const change = oldFatigue - gameState.stats.fatigue;
+            message = `你看了一本漫畫，心情變好了。(疲勞-${change})`;
         } else {
             success = false;
             message = "你沒有漫畫書！";
@@ -163,9 +193,9 @@ function performAction(action) {
         const validTime = [2, 3].includes(gameState.timePeriod);
         
         if (validDay && validTime) {
-            gameState.stats.academic = Math.min(100, gameState.stats.academic + 25);
-            gameState.stats.stress = Math.min(100, gameState.stats.stress + 20);
-            message = `你在補習班認真聽課。(學力+25, 壓力+20)`;
+            gameState.stats.learning.math = Math.min(100, gameState.stats.learning.math + 25);
+            gameState.stats.fatigue = Math.min(100, gameState.stats.fatigue + 20);
+            message = `你在補習班認真聽課。(數學+25, 疲勞+20)`;
         } else {
             success = false;
             message = "補習班現在沒開！(開放時間: 一、三、五 的 下午/晚上)";
