@@ -1,3 +1,21 @@
+/* Stat Bar Styles */
+.bar-container {
+    width: 90px;
+    height: 16px;
+    background: #eee;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-left: 8px;
+    display: inline-block;
+    vertical-align: middle;
+}
+.stat-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #4caf50, #2196f3);
+    border-radius: 8px 0 0 8px;
+    transition: width 0.3s;
+    width: 0;
+}
 body, html {
     margin: 0;
     padding: 0;
