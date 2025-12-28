@@ -223,8 +223,34 @@ function performAction(action, subject = null) {
         } else {
             gameState.stats.learning[subject] = Math.min(100, gameState.stats.learning[subject] + 25);
             gameState.stats.fatigue = Math.min(100, gameState.stats.fatigue + 20);
-            message = `你在補習班專心聽${subjectNames[subject]}課。(${subjectNames[subject]}+25, 疲勞+20)`;
+            
+            // Random Quiz Logic
+            let quizMsg = "";
+            // Chance to pass depends on current stat. e.g. stat 50 => 50% chance to pass.
+            // Or maybe a fixed difficulty? Let's use stat as probability for now.
+            const passChance = gameState.stats.learning[subject];
+            const roll = Math.random() * 100;
+            
+            if (roll < passChance) {
+                // Pass
+                gameState.stats.stress = Math.max(0, gameState.stats.stress - 5);
+                quizMsg = `\n隨堂小考考得不錯！(壓力-5)`;
+            } else {
+                // Fail
+                gameState.stats.stress = Math.min(100, gameState.stats.stress + 5);
+                quizMsg = `\n隨堂小考考砸了... (壓力+5)`;
+            }
+
+            message = `你在補習班專心聽${subjectNames[subject]}課。(${subjectNames[subject]}+25, 疲勞+20)${quizMsg}`;
         }
+    }
+    else if (action === 'work_cram_school') {
+        // Work logic
+        const wage = 50;
+        gameState.money += wage;
+        gameState.stats.fatigue = Math.min(100, gameState.stats.fatigue + 20);
+        gameState.stats.stress = Math.min(100, gameState.stats.stress + 5);
+        message = `你在補習班打工幫忙整理講義。(金錢+${wage}, 疲勞+20, 壓力+5)`;
     }
     else if (action === 'buy_refbook') {
         costTime = false;
