@@ -32,7 +32,12 @@ const gameState = {
         }
     },
     inventory: {
-        refBook: false,
+        refBooks: {
+            chinese: false,
+            english: false,
+            math: false,
+            science: false
+        },
         comic: 0
     }
 };
@@ -141,10 +146,17 @@ function closePanel() {
 }
 
 // Actions
-function performAction(action) {
+function performAction(action, subject = null) {
     let message = "";
     let success = true;
     let costTime = true;
+
+    const subjectNames = {
+        chinese: "國文",
+        english: "英文",
+        math: "數學",
+        science: "理化"
+    };
 
     if (action === 'sleep') {
         const oldFatigue = gameState.stats.fatigue;
@@ -163,17 +175,18 @@ function performAction(action) {
         message = `你刻苦地練習了鋼琴！(鋼琴+25, 疲勞+15)`;
     }
     else if (action === 'study') {
-        let gain = 10;
-        let extraMsg = "";
-        if (gameState.inventory.refBook) {
-            gain += 10;
-            gameState.inventory.refBook = false; // Consume buff
-            extraMsg = " (參考書加成!)";
+        if (!subject || !subjectNames[subject]) {
+            success = false;
+            message = "請選擇要讀的科目！";
+        } else if (!gameState.inventory.refBooks[subject]) {
+            success = false;
+            message = `你沒有${subjectNames[subject]}參考書，無法在家自習！請去書店購買。`;
+        } else {
+            let gain = 15; // Base gain with book
+            gameState.stats.learning[subject] = Math.min(100, gameState.stats.learning[subject] + gain);
+            gameState.stats.fatigue = Math.min(100, gameState.stats.fatigue + 10);
+            message = `你在家研讀${subjectNames[subject]}。(${subjectNames[subject]}+${gain}, 疲勞+10)`;
         }
-        // Defaulting to Math for general study for now
-        gameState.stats.learning.math = Math.min(100, gameState.stats.learning.math + gain);
-        gameState.stats.fatigue = Math.min(100, gameState.stats.fatigue + 10);
-        message = `你在家唸書。${extraMsg} (數學+${gain}, 疲勞+10)`;
     }
     else if (action === 'read_comic') {
         if (gameState.inventory.comic > 0) {
@@ -192,21 +205,28 @@ function performAction(action) {
         const validDay = [1, 3, 5].includes(gameState.dayOfWeek);
         const validTime = [2, 3].includes(gameState.timePeriod);
         
-        if (validDay && validTime) {
-            gameState.stats.learning.math = Math.min(100, gameState.stats.learning.math + 25);
-            gameState.stats.fatigue = Math.min(100, gameState.stats.fatigue + 20);
-            message = `你在補習班認真聽課。(數學+25, 疲勞+20)`;
-        } else {
+        if (!validDay || !validTime) {
             success = false;
             message = "補習班現在沒開！(開放時間: 一、三、五 的 下午/晚上)";
+        } else if (!subject || !subjectNames[subject]) {
+            success = false;
+            message = "請選擇要補習的科目！";
+        } else {
+            gameState.stats.learning[subject] = Math.min(100, gameState.stats.learning[subject] + 25);
+            gameState.stats.fatigue = Math.min(100, gameState.stats.fatigue + 20);
+            message = `你在補習班專心聽${subjectNames[subject]}課。(${subjectNames[subject]}+25, 疲勞+20)`;
         }
     }
     else if (action === 'buy_refbook') {
         costTime = false;
-        if (gameState.money >= 50) {
+        if (!subject || !subjectNames[subject]) {
+            message = "請選擇要購買的參考書科目！";
+        } else if (gameState.inventory.refBooks[subject]) {
+            message = `你已經有${subjectNames[subject]}參考書了！`;
+        } else if (gameState.money >= 50) {
             gameState.money -= 50;
-            gameState.inventory.refBook = true;
-            message = "購買了參考書！下次居家學習效果提升。";
+            gameState.inventory.refBooks[subject] = true;
+            message = `購買了${subjectNames[subject]}參考書！現在可以在家自習該科目了。`;
         } else {
             message = "金錢不足！";
         }

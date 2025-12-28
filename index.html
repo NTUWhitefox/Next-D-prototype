@@ -94,7 +94,7 @@
         <div class="action-grid">
             <div class="action-card" onclick="performAction('sleep')">
                 <img src="assets/action_sleep.png" alt="睡覺">
-                <p>睡覺 (-壓力)</p>
+                <p>睡覺 (-疲勞)</p>
             </div>
             <div class="action-card" onclick="performAction('piano_easy')">
                 <img src="assets/action_piano.png" alt="簡單練琴">
@@ -102,25 +102,54 @@
             </div>
             <div class="action-card" onclick="performAction('piano_hard')">
                 <img src="assets/action_piano.png" alt="困難練琴">
-                <p>困難練琴 (+大量鋼琴, +壓力)</p>
+                <p>困難練琴 (+大量鋼琴, +疲勞)</p>
             </div>
-            <div class="action-card" onclick="performAction('study')">
-                <img src="assets/action_study.png" alt="居家學習">
-                <p>居家學習 (+學力)</p>
+            
+            <!-- Study Options -->
+            <div class="action-card" onclick="performAction('study', 'chinese')">
+                <img src="assets/action_study.png" alt="讀國文">
+                <p>讀國文 (需參考書)</p>
             </div>
+            <div class="action-card" onclick="performAction('study', 'english')">
+                <img src="assets/action_study.png" alt="讀英文">
+                <p>讀英文 (需參考書)</p>
+            </div>
+            <div class="action-card" onclick="performAction('study', 'math')">
+                <img src="assets/action_study.png" alt="讀數學">
+                <p>讀數學 (需參考書)</p>
+            </div>
+            <div class="action-card" onclick="performAction('study', 'science')">
+                <img src="assets/action_study.png" alt="讀理化">
+                <p>讀理化 (需參考書)</p>
+            </div>
+
             <div class="action-card" id="btn-read-comic" onclick="performAction('read_comic')" style="display:none;">
                 <img src="assets/item_comic.png" alt="看漫畫">
-                <p>看漫畫 (-壓力)</p>
+                <p>看漫畫 (-疲勞)</p>
             </div>
         </div>
     </template>
 
     <template id="tpl-street">
         <div class="action-grid">
-            <div class="action-card" onclick="performAction('cram_school')">
-                <img src="assets/action_cram.png" alt="補習班">
-                <p>補習班 (一三五 下午/晚上)</p>
+            <!-- Cram School Options -->
+            <div class="action-card" onclick="performAction('cram_school', 'chinese')">
+                <img src="assets/action_cram.png" alt="補國文">
+                <p>補國文 (一三五)</p>
             </div>
+            <div class="action-card" onclick="performAction('cram_school', 'english')">
+                <img src="assets/action_cram.png" alt="補英文">
+                <p>補英文 (一三五)</p>
+            </div>
+            <div class="action-card" onclick="performAction('cram_school', 'math')">
+                <img src="assets/action_cram.png" alt="補數學">
+                <p>補數學 (一三五)</p>
+            </div>
+            <div class="action-card" onclick="performAction('cram_school', 'science')">
+                <img src="assets/action_cram.png" alt="補理化">
+                <p>補理化 (一三五)</p>
+            </div>
+
             <div class="action-card" onclick="openShop()">
                 <img src="assets/action_shop.png" alt="書店">
                 <p>書店 (購買書籍)</p>
@@ -130,10 +159,24 @@
 
     <template id="tpl-shop">
         <div class="action-grid">
-            <div class="action-card" onclick="performAction('buy_refbook')">
-                <img src="assets/item_refbook.png" alt="參考書">
-                <p>參考書 ($50)<br><small>提升下次學習效果</small></p>
+            <!-- Buy Books -->
+            <div class="action-card" onclick="performAction('buy_refbook', 'chinese')">
+                <img src="assets/item_refbook.png" alt="國文參考書">
+                <p>國文參考書 ($50)</p>
             </div>
+            <div class="action-card" onclick="performAction('buy_refbook', 'english')">
+                <img src="assets/item_refbook.png" alt="英文參考書">
+                <p>英文參考書 ($50)</p>
+            </div>
+            <div class="action-card" onclick="performAction('buy_refbook', 'math')">
+                <img src="assets/item_refbook.png" alt="數學參考書">
+                <p>數學參考書 ($50)</p>
+            </div>
+            <div class="action-card" onclick="performAction('buy_refbook', 'science')">
+                <img src="assets/item_refbook.png" alt="理化參考書">
+                <p>理化參考書 ($50)</p>
+            </div>
+
             <div class="action-card" onclick="performAction('buy_comic')">
                 <img src="assets/item_comic.png" alt="漫畫書">
                 <p>漫畫書 ($30)<br><small>在家閱讀減壓</small></p>
