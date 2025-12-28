@@ -58,6 +58,15 @@ function initGame() {
     updateUI();
 }
 
+// Render a horizontal bar for a stat (0-100)
+function renderBar(id, value) {
+    const bar = document.getElementById(id);
+    if (bar) {
+        bar.style.width = Math.max(0, Math.min(100, value)) + '%';
+        bar.title = value;
+    }
+}
+
 // Update UI based on state
 function updateUI() {
     // Time
@@ -68,25 +77,25 @@ function updateUI() {
     // Money
     uiMoney.textContent = gameState.money;
 
-    // Stats
-    getEl('val-fatigue').textContent = gameState.stats.fatigue;
-    getEl('val-stress').textContent = gameState.stats.stress;
-    getEl('val-trauma').textContent = gameState.stats.trauma;
+    // Stats (bars)
+    renderBar('bar-fatigue', gameState.stats.fatigue);
+    renderBar('bar-stress', gameState.stats.stress);
+    renderBar('bar-trauma', gameState.stats.trauma);
 
-    getEl('val-chinese').textContent = gameState.stats.learning.chinese;
-    getEl('val-english').textContent = gameState.stats.learning.english;
-    getEl('val-math').textContent = gameState.stats.learning.math;
-    getEl('val-science').textContent = gameState.stats.learning.science;
+    renderBar('bar-chinese', gameState.stats.learning.chinese);
+    renderBar('bar-english', gameState.stats.learning.english);
+    renderBar('bar-math', gameState.stats.learning.math);
+    renderBar('bar-science', gameState.stats.learning.science);
 
-    getEl('val-piano').textContent = gameState.stats.talent.piano;
-    getEl('val-physical').textContent = gameState.stats.talent.physical;
-    getEl('val-chess').textContent = gameState.stats.talent.chess;
-    getEl('val-swimming').textContent = gameState.stats.talent.swimming;
+    renderBar('bar-piano', gameState.stats.talent.piano);
+    renderBar('bar-physical', gameState.stats.talent.physical);
+    renderBar('bar-chess', gameState.stats.talent.chess);
+    renderBar('bar-swimming', gameState.stats.talent.swimming);
 
-    getEl('val-charm').textContent = gameState.stats.personality.charm;
-    getEl('val-eloquence').textContent = gameState.stats.personality.eloquence;
-    getEl('val-deception').textContent = gameState.stats.personality.deception;
-    getEl('val-home_economics').textContent = gameState.stats.personality.home_economics;
+    renderBar('bar-charm', gameState.stats.personality.charm);
+    renderBar('bar-eloquence', gameState.stats.personality.eloquence);
+    renderBar('bar-deception', gameState.stats.personality.deception);
+    renderBar('bar-home_economics', gameState.stats.personality.home_economics);
 }
 
 // Time System
